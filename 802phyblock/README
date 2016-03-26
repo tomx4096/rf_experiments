@@ -1,0 +1,26 @@
+bastibl's 802.15.4 OQPSK phy block was modified to use the polyphase clock sync
+block instead of the MM clock recovery block.
+
+10.000 6 byte ACK packets were sent from an RZUSB stick 3 meters away from
+a USRP N210 with an SBX daughterboard and no antenna. this scenario was 
+performed twice to test the performance of the original block with the modified
+block, comparing their packet error rate (PER). see per.sh to see how this
+number was determined.
+
+the parameters of the MM clock were not modified from bastibl's original 
+implementation. in the new implementation, the MM clock recovery block was
+replaced with the polyphase clock sync block, with the following parameters:
+
+Samples/Symbol: 2
+Loop Bandwidth: 0.063 # 2pi/10
+Taps: firdes.root_raised_cosine(1,samp_rate,chip_rate,0.00016,32)
+Filter Size: 32
+Initial Phase: 16
+Maximum Rate Deviation: 1.5
+Output SPS: 1
+
+(chip_rate = 4e6, samp_rate= 2e6)
+
+the PER for the MM clock recovery block was 17.93%. 
+the PER for the polyphase clock sync was 45.64%. 
+
